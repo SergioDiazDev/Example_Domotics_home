@@ -45,19 +45,18 @@ CREATE TABLE Sensor_Readings (
 -- );
 
 -- Inserción de datos en la tabla Rooms
--- Inserción de datos en la tabla Rooms (con nombres en inglés)
 INSERT INTO Rooms (name) VALUES
 ('Living Room'), ('Kitchen'), ('Master Bedroom'), ('Secondary Bedroom'), ('Bathroom'), ('Office'), ('Garage'), ('Basement');
 
--- Inserción de datos en la tabla Sensors (con nombres de habitaciones en inglés)
+-- Inserción de datos en la tabla Sensors 
 INSERT INTO Sensors (type, room_id)
-SELECT 'Temperature', id FROM Rooms WHERE name IN ('Living Room', 'Kitchen', 'Master Bedroom', 'Bathroom', 'Office', 'Garage', 'Basement');
+SELECT 'Temperature', id FROM Rooms WHERE name IN ('Living Room', 'Kitchen', 'Master Bedroom', 'Bathroom', 'Secondary Bedroom', 'Office', 'Garage', 'Basement');
 
 INSERT INTO Sensors (type, room_id)
-SELECT 'Humidity', id FROM Rooms WHERE name IN ('Living Room', 'Kitchen', 'Bathroom', 'Office', 'Garage', 'Basement');
+SELECT 'Humidity', id FROM Rooms WHERE name IN ('Living Room', 'Kitchen', 'Master Bedroom', 'Bathroom', 'Secondary Bedroom', 'Office', 'Garage', 'Basement');
 
 INSERT INTO Sensors (type, room_id)
-SELECT 'Light', id FROM Rooms WHERE name IN ('Living Room', 'Kitchen', 'Master Bedroom', 'Secondary Bedroom', 'Office', 'Garage', 'Basement');
+SELECT 'Light', id FROM Rooms WHERE name IN ('Living Room', 'Kitchen', 'Master Bedroom', 'Bathroom', 'Secondary Bedroom', 'Office', 'Garage', 'Basement');
 
 -- -- Inserción de datos en la tabla Devices
 -- INSERT INTO Devices (type, state, power_consumption, room_id)

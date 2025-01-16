@@ -27,20 +27,9 @@ LIGHT_RANGE = (0, 100)
 # Evento para detener los threads
 stop_event = Event()
 
-def get_rooms_data(conn):
-    with conn.cursor() as cur:
-        cur.execute("SELECT id, name FROM Rooms;")
-        return cur.fetchall()
-
-
 def get_sensors_data(conn):
     with conn.cursor() as cur:
          cur.execute("SELECT id, type, room_id FROM Sensors;")
-         return cur.fetchall()
-
-def get_devices_data(conn):
-    with conn.cursor() as cur:
-         cur.execute("SELECT id FROM Devices;")
          return cur.fetchall()
 
 
@@ -60,38 +49,6 @@ def insert_sensor_reading(conn, sensor_type, room_id, value):
         conn.rollback()
 
 
-def insert_energy_consumption(conn, device_id, energy_used):
-    try:
-        with conn.cursor() as cur:
-             cur.execute(
-                """
-                INSERT INTO Energy_Consumption (device_id, energy_used, timestamp)
-                VALUES (%s, %s, NOW())
-                """,
-                (device_id, energy_used),
-            )
-             conn.commit()
-    except Exception as e:
-         print(f"Error inserting energy consumption: {e}")
-         conn.rollback()
-
-
-def insert_solar_production(conn, energy_generated):
-     try:
-        with conn.cursor() as cur:
-            cur.execute(
-                 """
-                INSERT INTO Solar_Production (energy_generated, timestamp)
-                VALUES (%s, NOW())
-                """,
-                (energy_generated,),
-            )
-            conn.commit()
-     except Exception as e:
-         print(f"Error inserting solar production: {e}")
-         conn.rollback()
-
-
 def simulate_sensor_data(conn, sensors, stop_event):
     while not stop_event.is_set():
         for sensor_id, sensor_type, room_id in sensors:
@@ -102,23 +59,8 @@ def simulate_sensor_data(conn, sensors, stop_event):
             elif sensor_type == "Light":
                 value = round(random.uniform(*LIGHT_RANGE), 0)
             else:
-                continue  # Skip if sensor type is unknown
+                continue
             insert_sensor_reading(conn, sensor_type, room_id, value)
-        time.sleep(INSERT_INTERVAL)
-
-
-def simulate_energy_data(conn, devices, stop_event):
-    while not stop_event.is_set():
-        for device_id in devices:
-            energy_used = round(random.uniform(*ENERGY_RANGE), 1)
-            insert_energy_consumption(conn, device_id[0], energy_used)
-        time.sleep(INSERT_INTERVAL)
-
-
-def simulate_solar_data(conn, stop_event):
-    while not stop_event.is_set():
-        energy_generated = round(random.uniform(*SOLAR_RANGE), 1)
-        insert_solar_production(conn, energy_generated)
         time.sleep(INSERT_INTERVAL)
 
 
