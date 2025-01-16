@@ -15,11 +15,10 @@ DB_PORT = "5432" # Reemplaza con el puerto que estas usando
 INSERT_INTERVAL = 5
 
 # Rangos para datos simulados
-TEMP_RANGE = (15, 30)
-HUMIDITY_RANGE = (30, 70)
-LIGHT_RANGE = (0, 1000)
-ENERGY_RANGE = (0.1, 5)
-SOLAR_RANGE = (0, 10)
+TEMP_RANGE = (0, 35)
+HUMIDITY_RANGE = (0, 100)
+LIGHT_RANGE = (0, 100)
+
 
 # Evento para detener los threads
 stop_event = Event()
@@ -129,16 +128,10 @@ def main():
             password=DB_PASSWORD,
             port = DB_PORT
         )
-        rooms = get_rooms_data(conn)
         sensors = get_sensors_data(conn)
-        devices = get_devices_data(conn)
         # Inicia los threads
         sensor_thread = Thread(target=simulate_sensor_data, args=(conn, sensors, stop_event))
-        energy_thread = Thread(target=simulate_energy_data, args=(conn, devices, stop_event))
-        solar_thread = Thread(target=simulate_solar_data, args=(conn, stop_event))
         sensor_thread.start()
-        energy_thread.start()
-        solar_thread.start()
         print("Simulación de datos iniciada. Presiona Ctrl+C para detener.")
         # Mantiene el script principal ejecutándose hasta que se presione Ctrl+C
         while True:
@@ -147,8 +140,6 @@ def main():
         print("\nDeteniendo simulación...")
         stop_event.set()  # Indica a los threads que se detengan
         sensor_thread.join()
-        energy_thread.join()
-        solar_thread.join()
         print("Simulación detenida.")
     except Exception as e:
         print(f"Error general: {e}")
