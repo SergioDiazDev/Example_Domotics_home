@@ -17,5 +17,5 @@ ENV POSTGRES_DB=$POSTGRES_DB
 ENV POSTGRES_PORT=$POSTGRES_PORT
 ENV PGDATA=$PGDATA
 
-# Opcional: Exponemos el puerto de PostgreSQL (ya se mapea en docker-compose)
-EXPOSE $POSTGRES_PORT
+# # Opcional: Exponemos el puerto de PostgreSQL (ya se mapea en docker-compose)
+# EXPOSE $POSTGRES_PORT
