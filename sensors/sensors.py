@@ -1,15 +1,19 @@
 import psycopg2
 import time
 import random
-from datetime import datetime, timedelta
 from threading import Thread, Event
+from dotenv import load_dotenv
+import os
+
+# Cargar las variables del archivo .env
+load_dotenv()
 
 # Configuración de la conexión a PostgreSQL
-DB_HOST = "localhost"  # Ajusta según tu configuración
-DB_NAME = "myHome"  # Reemplaza con el nombre de tu base de datos
-DB_USER = "admin"  # Reemplaza con tu usuario
-DB_PASSWORD = "admin123"  # Reemplaza con tu contraseña
-DB_PORT = "5432" # Reemplaza con el puerto que estas usando
+DB_HOST = os.getenv("HOST")
+DB_NAME = os.getenv("POSTGRES_DB")
+DB_USER = os.getenv("POSTGRES_USER")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+DB_PORT = os.getenv("POSTGRES_PORT")
 
 # Intervalo de tiempo entre inserciones de datos en segundos
 INSERT_INTERVAL = 5
